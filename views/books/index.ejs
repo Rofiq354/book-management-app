@@ -1,0 +1,13 @@
+<h1>Data Dari Json</h1>
+<ul>
+  <% books.forEach(book => { %>
+  <li>
+    <%= book.title %> %>
+    <ol>
+      <% authors.forEach(author => { if (author.id === book.authorId) { %>
+      <li><%= author.name %></li>
+      <% }}) %>
+    </ol> 
+  </li>
+  <% }) %>
+</ul>

@@ -1,0 +1,4 @@
+[
+  { "id": 1, "title": "Clean Code", "authorId": 1, "stock": 3 },
+  { "id": 2, "title": "Refactoring UI", "authorId": 2, "stock": 5 }
+]
