@@ -1,13 +1,20 @@
-<h1>Data Dari Json</h1>
-<ul>
-  <% books.forEach(book => { %>
-  <li>
-    <%= book.title %> %>
-    <ol>
-      <% authors.forEach(author => { if (author.id === book.authorId) { %>
-      <li><%= author.name %></li>
-      <% }}) %>
-    </ol> 
-  </li>
-  <% }) %>
-</ul>
+<h1>Daftar Buku</h1>
+
+<!-- <a href="/add-book">Tambah Buku</a> -->
+<%- include('./form') %>
+<table border="2">
+  <thead>
+    <th>Title</th>
+    <th>Author</th>
+    <th>Stock</th>
+  </thead>
+  <tbody>
+    <% datas.forEach(data => { %>
+    <tr>
+      <td><%= data.title %></td>
+      <td><%= data.authorName %></td>
+      <td><%= data.stock %></td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>

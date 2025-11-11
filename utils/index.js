@@ -25,4 +25,35 @@ const loadAuthors = () => {
   return JSON.parse(file);
 };
 
-module.exports = { loadBooks, loadAuthors };
+const objBooks = ({ title, stock, authorId }) => {
+  return {
+    id: Date.now(),
+    title,
+    authorId: Number(authorId),
+    stock: Number(stock),
+    createdAt: new Date(),
+  };
+};
+
+const loadData = () => {
+  const books = loadBooks();
+  const authors = loadAuthors();
+
+  const mappingBook = books.map((b) => {
+    const author = authors.find((a) => a.id === b.authorId);
+    // console.log(b);
+    return {
+      title: b.title,
+      authorName: author.name,
+      stock: b.stock,
+    };
+  });
+
+  return mappingBook;
+};
+
+const saveBooks = (books) => {
+  fs.writeFileSync(booksPath, JSON.stringify(books));
+};
+
+module.exports = { loadBooks, loadAuthors, loadData, objBooks, saveBooks };
