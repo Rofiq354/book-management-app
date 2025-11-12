@@ -1,12 +1,26 @@
-<form action="/books/add" method="post">
-  <h1>Form Tambah Data</h1>
-  <input type="text" id="title" name="title" placeholder="input title" />
-  <input type="number" id="stock" name="stock" placeholder="input stock" />
+<form action="/books/<%= book == '' ? 'add' : `updated-${book.id}` %>" method="post" onsubmit="return validateForm()">
+  <h1>Form <%= book == '' ? 'Tambah Data' : 'Edit Data' %></h1>
+  <input
+    type="text"
+    id="title"
+    name="title"
+    value="<%= book.title %>"
+    placeholder="input title"
+  />
+  <span id="titleError" style="color: red"></span>
+  <input type="number" id="stock" name="stock" value="<%= book.stock %>" placeholder="input stock" />
+  <span id="stockError" style="color: red"></span>
   <select name="authorId" id="authorId">
     <option value="" selected hidden>Pilih Auhtor</option>
     <% authors.forEach(a => { %>
-    <option value="<%= a.id %>"><%= a.name %></option>
+    <option
+      value="<%= a.id %>"
+      <%= book.authorId == a.id ? 'selected' : '' %>
+    >
+      <%= a.name %>
+    </option>
     <% }) %>
   </select>
-  <button type="submit">Tambah Data</button>
+  <span id="authorIdError" style="color: red"></span>
+  <button type="submit"><%= book == '' ? 'Tambah Data' : 'Update Data' %></button>
 </form>

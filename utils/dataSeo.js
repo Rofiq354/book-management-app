@@ -1,4 +1,4 @@
-module.exports = Seo = (req, page) => {
+module.exports = Seo = (req, page = '') => {
   return {
     documentTitle: `Book Management App ${page}`,
     description: "",

@@ -43,6 +43,7 @@ const loadData = () => {
     const author = authors.find((a) => a.id === b.authorId);
     // console.log(b);
     return {
+      id: b.id,
       title: b.title,
       authorName: author.name,
       stock: b.stock,
@@ -52,8 +53,24 @@ const loadData = () => {
   return mappingBook;
 };
 
+const findBook = (id) => {
+  const books = loadBooks();
+  const bookId = Number(id);
+  const bookIndex = books.findIndex((b) => b.id === bookId);
+  const book = books[bookIndex];
+
+  return { books, book, bookIndex };
+};
+
 const saveBooks = (books) => {
   fs.writeFileSync(booksPath, JSON.stringify(books));
 };
 
-module.exports = { loadBooks, loadAuthors, loadData, objBooks, saveBooks };
+module.exports = {
+  loadBooks,
+  loadAuthors,
+  loadData,
+  objBooks,
+  saveBooks,
+  findBook,
+};

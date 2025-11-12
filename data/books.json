@@ -1,18 +1,1 @@
-[
-  { "id": 1, "title": "Clean Code", "authorId": 1, "stock": 3 },
-  { "id": 2, "title": "Refactoring UI", "authorId": 2, "stock": 5 },
-  {
-    "id": 1762879973952,
-    "title": "testing add",
-    "authorId": 2,
-    "stock": 2,
-    "createdAt": "2025-11-11T16:52:53.952Z"
-  },
-  {
-    "id": 1762880411311,
-    "title": "testing lagi",
-    "authorId": 1,
-    "stock": 12,
-    "createdAt": "2025-11-11T17:00:11.311Z"
-  }
-]
+[{"id":1,"title":"Clean Code Updated","authorId":1,"stock":3},{"id":2,"title":"Refactoring UI","authorId":2,"stock":5}]
