@@ -5,12 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><%= title %></title>
 
+    <link rel="stylesheet" href="/css/modal.css" />
     <link rel="stylesheet" href="/css/style.css" />
   </head>
-  <body>
-    <%- body %>
+  <body class="bg-gray-50 min-h-screen flex flex-col">
+    <%- include('./partials/navbar') %>
 
-    <script src="/js/formBooksValidate.js"></script>
-    <script src="/js/openDeleteModal.js"></script>
+    <main class="flex-1 container mx-auto px-4 py-8 grid gap-10">
+      <%- body %>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-100 text-center py-4 text-sm text-gray-500">
+      &copy; 2025 Book Management App
+    </footer>
+
+    <% if (typeof page !== 'undifined' && page === 'books') { %> <%-
+      include('../books/deleteModal') %>
+      <script src="/js/formBooksValidate.js"></script>
+      <script src="/js/queryFilterDom.js"></script>
+      <script src="/js/openDeleteModal.js"></script>
+      <script src="/js/booksTable.js"></script>
+    <% } %>
   </body>
 </html>

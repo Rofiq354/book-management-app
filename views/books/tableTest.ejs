@@ -1,0 +1,86 @@
+<table class="w-full hidden md:table">
+  <thead>
+    <tr class="bg-gray-100 text-gray-700">
+      <th class="p-3 text-left">Title</th>
+      <th class="p-3 text-left">Author</th>
+      <th class="p-3 text-left">Stock</th>
+      <th class="p-3 text-left">Created At</th>
+      <th class="p-3 text-center">Action</th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% datas.forEach(b => { %>
+    <tr class="border-b hover:bg-gray-50">
+      <td class="p-3"><%= b.title %></td>
+      <td class="p-3"><%= b.authorName %></td>
+      <td class="p-3"><%= b.stock %></td>
+      <td class="p-3"><%= b.createdAtFormatted %></td>
+      <td class="p-3 text-center flex justify-center gap-3">
+        <a href="/books/edit-<%= b.id %>" class="text-blue-600">✏️</a>
+        <button
+          onclick="openDeleteModal('<%= b.id %>', '<%= b.title %>')"
+          class="text-red-600"
+        >
+          🗑️
+        </button>
+      </td>
+    </tr>
+    <% }) %>
+  </tbody>
+</table>
+
+<!-- Mobile Cards -->
+<div class="md:hidden space-y-3">
+  <% datas.forEach(b => { %>
+  <div class="border rounded-xl shadow-sm p-3 bg-white">
+    <!-- Header -->
+    <div class="flex justify-between items-center">
+      <h3 class="font-semibold text-gray-800"><%= b.title %></h3>
+
+      <button class="text-gray-600" onclick="toggleDetail('<%= b.id %>')">
+        <span id="arrow-<%= b.id %>">▼</span>
+      </button>
+    </div>
+
+    <!-- Detail Section -->
+    <div
+      id="detail-<%= b.id %>"
+      class="overflow-hidden max-h-0 transition-all duration-300"
+    >
+      <div class="mt-3 space-y-2">
+        <div class="flex justify-between text-sm border-b pb-1">
+          <span class="text-gray-500">Author</span>
+          <span class="font-medium"><%= b.authorName %></span>
+        </div>
+
+        <div class="flex justify-between text-sm border-b pb-1">
+          <span class="text-gray-500">Stock</span>
+          <span class="font-medium"><%= b.stock %></span>
+        </div>
+
+        <div class="flex justify-between text-sm border-b pb-1">
+          <span class="text-gray-500">Created</span>
+          <span class="font-medium"><%= b.createdAtFormatted %></span>
+        </div>
+
+        <!-- Actions -->
+        <div class="flex justify-end gap-3 pt-2">
+          <a
+            href="/books/edit-<%= b.id %>"
+            class="text-blue-600 text-sm flex items-center gap-1"
+          >
+            ✏️ Edit
+          </a>
+          <button
+            onclick="openDeleteModal('<%= b.id %>', '<%= b.title %>')"
+            class="text-red-600 text-sm flex items-center gap-1"
+          >
+            🗑️ Delete
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <% }) %>
+</div>

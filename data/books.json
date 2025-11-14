@@ -1,1 +1,1 @@
-[{"id":1,"title":"Clean Code Updated","authorId":1,"stock":3},{"id":2,"title":"Refactoring UI","authorId":2,"stock":5}]
+[{"id":2,"title":"Refactoring UI","authorId":1,"stock":15,"createdAt":"2025-11-13T07:51:45.191Z","updatedAt":"2025-11-14T10:06:27.908Z"},{"id":1763060978968,"title":"UI UX Mobile","authorId":1,"stock":30,"createdAt":"2025-11-13T19:09:38.968Z"},{"id":1763114812076,"title":"Testing Add","authorId":2,"stock":21,"createdAt":"2025-11-14T10:06:52.076Z"}]

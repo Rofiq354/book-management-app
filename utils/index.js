@@ -43,10 +43,8 @@ const loadData = () => {
     const author = authors.find((a) => a.id === b.authorId);
     // console.log(b);
     return {
-      id: b.id,
-      title: b.title,
+      ...b,
       authorName: author.name,
-      stock: b.stock,
     };
   });
 
@@ -62,6 +60,17 @@ const findBook = (id) => {
   return { books, book, bookIndex };
 };
 
+const updateBookData = (oldBook, newData) => {
+  const merge = {
+    ...oldBook,
+    ...newData,
+    createdAt: oldBook.createdAt || new Date(),
+    updatedAt: new Date(),
+  };
+
+  return merge;
+};
+
 const saveBooks = (books) => {
   fs.writeFileSync(booksPath, JSON.stringify(books));
 };
@@ -73,4 +82,5 @@ module.exports = {
   objBooks,
   saveBooks,
   findBook,
+  updateBookData,
 };

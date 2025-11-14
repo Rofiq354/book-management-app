@@ -1,7 +1,7 @@
 const modal = document.getElementById("openDeleteModal");
 
 const openDeleteModal = (id, title) => {
-  modal.style.display = "block";
+  modal.classList.remove("hidden");
   const bookTitleName = document.getElementById("bookTitle");
   bookTitleName.textContent = title;
 
@@ -10,5 +10,5 @@ const openDeleteModal = (id, title) => {
 };
 
 const closeDeleteModal = () => {
-  modal.style.display = "none";
+  modal.classList.add("hidden");
 };
