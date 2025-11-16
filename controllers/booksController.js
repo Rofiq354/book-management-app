@@ -7,11 +7,12 @@ const {
   findBook,
   updateBookData,
 } = require("../utils");
-const Seo = require("../utils/dataSeo");
+const { Seo } = require("../utils/dataSeo");
 
 exports.index = (req, res) => {
   try {
-    const seo = Seo(req);
+    const page = "Books";
+    const seo = Seo(req, `| ${page}`);
     // const books = loadBooks();
     const authors = loadAuthors();
     const datas = loadData();
@@ -24,7 +25,7 @@ exports.index = (req, res) => {
     if (!qAuthor) {
       result;
     } else {
-      result = datas.filter((b) => b.authorName === qAuthor);
+      result = datas.filter((b) => b.author.name === qAuthor);
     }
 
     if (qStock === "up") {
@@ -39,7 +40,7 @@ exports.index = (req, res) => {
       filterAuthor: qAuthor,
       authors,
       book: "",
-      page: "books",
+      page,
     });
   } catch (error) {
     console.error(error.message);
@@ -61,7 +62,7 @@ exports.addBook = (req, res) => {
 
 exports.editBook = (req, res) => {
   try {
-    const seo = Seo(req, "| Edit");
+    const seo = Seo(req, "| Edit Book");
     const books = loadBooks();
     const authors = loadAuthors();
     const datas = loadData();
@@ -91,7 +92,7 @@ exports.editBook = (req, res) => {
       filterAuthor: qAuthor,
       authors,
       book,
-      page: "books",
+      page: "Books",
     });
   } catch (error) {
     console.error(error.message);
@@ -125,7 +126,9 @@ exports.updateTitleBook = (req, res) => {
     const { books, book } = findBook(req.body.id);
     const { title } = req.body;
 
-    book.title = title;
+    const newBook = updateBookData(book, { title });
+
+    books[bookIndex] = newBook;
 
     saveBooks(books);
     res.json({ message: "Book title updated!" });
@@ -140,7 +143,9 @@ exports.updateStockBook = (req, res) => {
     const { books, book } = findBook(req.body.id);
     const { stock } = req.body;
 
-    book.stock = stock;
+    const newBook = updateBookData(book, { stock });
+
+    books[bookIndex] = newBook;
 
     saveBooks(books);
     res.json({ message: "Book Stock updated!" });

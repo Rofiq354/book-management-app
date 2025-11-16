@@ -1,0 +1,74 @@
+<!-- Form Section -->
+<%- include('./form') %>
+
+<!-- Book List Section -->
+<section aria-labelledby="list-title" class="bg-white p-6 rounded-2xl shadow">
+  <div
+    class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-4"
+  >
+    <h2 id="list-title" class="text-lg font-semibold text-gray-700">
+      Author List
+    </h2>
+
+    <!-- Filter By Authors -->
+    <div class="flex flex-wrap items-center gap-2">
+      <label for="filterByDate" class="text-sm text-gray-600 font-medium"
+        >Filter:</label
+      >
+      <select
+        name="filterByDate"
+        id="filterByDate"
+        class="border border-gray-300 cursor-pointer rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition"
+      >
+        <option value="" selected hidden>By Date</option>
+        <option value="oldest">Oldest</option>
+        <option value="newest">Newest</option>
+      </select>
+
+      <select
+        name="filterBookTotal"
+        id="filterBookTotal"
+        class="border md:hidden border-gray-300 cursor-pointer rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition"
+      >
+        <option value="" selected hidden>By Total Book</option>
+        <option value="highest">Highest</option>
+        <option value="lowest">Lowest</option>
+      </select>
+
+      <!-- Reload Filter -->
+      <button
+        id="reloadFilter"
+        class="bg-gray-100 hover:bg-gray-200 px-3 py-2 rounded-lg text-sm flex items-center gap-1"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="-0.5 -0.5 16 16"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke="#000000"
+          id="Refresh--Streamline-Mynaui"
+          height="16"
+          width="16"
+        >
+          <path
+            d="M12.8125 5c-0.8699999999999999 -1.986875 -3.0143750000000002 -3.125 -5.32625 -3.125C4.561875000000001 1.875 2.158125 4.095 1.875 6.9375"
+            stroke-width="1"
+          ></path>
+          <path
+            d="M10.305625000000001 5.25h2.48125a0.3375 0.3375 0 0 0 0.3375 -0.3375V2.4375M2.1875 10c0.8699999999999999 1.986875 3.0143750000000002 3.125 5.32625 3.125 2.9243750000000004 0 5.328125 -2.22 5.61125 -5.0625"
+            stroke-width="1"
+          ></path>
+          <path
+            d="M4.694375 9.75h-2.48125a0.3375 0.3375 0 0 0 -0.338125 0.3375v2.475"
+            stroke-width="1"
+          ></path>
+        </svg>
+        Reload
+      </button>
+    </div>
+  </div>
+
+  <!-- Table Section -->
+  <div class="overflow-x-auto"><%- include('./table') %></div>
+</section>

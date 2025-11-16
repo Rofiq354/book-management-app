@@ -1,8 +1,12 @@
-const tdTitle = document.querySelectorAll("#booksTable .tableTdTitle");
-const tdStock = document.querySelectorAll("#booksTable .tableTdStock");
-// const tdAuthorName = document.querySelectorAll(
+// Books Content
+const tdBookTitle = document.querySelectorAll("#booksTable .tableTdTitle");
+const tdBookStock = document.querySelectorAll("#booksTable .tableTdStock");
+// const tdBookAuthorName = document.querySelectorAll(
 //   "#booksTable .tableTdAuthorName"
 // );
+
+// Author Contnt
+const tdAuthorName = document.querySelectorAll("#authorsTable .tableTdName");
 
 function toggleDetail(id) {
   const box = document.getElementById("detail-" + id);
@@ -79,12 +83,16 @@ const dblClicked = (tdElement, tdElementName, urlPath) => {
 
         let data = "";
 
-        if (urlPath === "updateTitle") {
-          data = { id: tr.dataset.id, title: newValue };
+        if (urlPath === "updateTitleBook") {
+          data = { id, title: newValue };
         }
 
-        if (urlPath === "updateStock") {
-          data = { id: tr.dataset.id, stock: newValue };
+        if (urlPath === "updateStockBook") {
+          data = { id, stock: newValue };
+        }
+
+        if (urlPath === "updateNameAuthor") {
+          data = { id, name: newValue };
         }
 
         fetch(`/books/${urlPath}-${id}`, {
@@ -116,6 +124,8 @@ const dblClicked = (tdElement, tdElementName, urlPath) => {
   });
 };
 
-if (tdTitle) dblClicked(tdTitle, "title", "updateTitle");
-if (tdStock) dblClicked(tdStock, "stock", "updateStock");
-// if (tdAuthorName) dblClicked(tdAuthorName, "updateAuthor");
+if (tdBookTitle) dblClicked(tdBookTitle, "title", "updateTitleBook");
+if (tdBookStock) dblClicked(tdBookStock, "stock", "updateStockBook");
+// if (tdAuthorName) dblClicked(tdAuthorName, "updateAuthorBook");
+
+if (tdAuthorName) dblClicked(tdAuthorName, "name", "updateNameAuthor");

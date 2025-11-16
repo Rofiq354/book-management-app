@@ -12,7 +12,7 @@
   "type": "commonjs",
   "main": "app",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon app",
     "build:css": "tailwindcss -i ./public/css/tailwind.css -o ./public/css/style.css",
     "watch": "tailwindcss -i ./public/css/tailwind.css -o ./public/css/style.css --watch"
   },

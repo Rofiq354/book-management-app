@@ -26,7 +26,7 @@
 		<% } %> <% datas.forEach(data => { %>
 		<tr class="border-t hover:bg-gray-50" data-id="<%= data.id %>">
 			<td class="px-4 py-2 tableTdTitle"><%= data.title %></td>
-			<td class="px-4 py-2 tableTdAuthorName"><%= data.authorName %></td>
+			<td class="px-4 py-2 tableTdAuthorName"><%= data.authorId !== null ? data.author.name : 'Anonymous' %></td>
 			<td class="px-4 py-2 text-center tableTdStock"><%= data.stock %></td>
 			<td class="px-4 py-2 text-gray-500 text-sm">
 				<%= data.createdAt ? new Date(data.createdAt).toLocaleDateString() :
@@ -51,7 +51,7 @@
 					<button
 						class="text-red-600 hover:text-red-800 transition"
 						title="Delete Book"
-						onclick="return openDeleteModal(`<%= data.id %>`, `<%= data.title %>`)"
+						onclick="return openDeleteModal(`<%= data.id %>`, 'books', `<%= data.title %>`)"
 					>
 						<svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"
 							stroke="currentColor" stroke-width="2">
@@ -88,7 +88,7 @@
       <div class="mt-3 space-y-2">
         <div class="flex justify-between text-sm border-b pb-1">
           <span class="text-gray-500">Author</span>
-          <span class="font-medium"><%= b.authorName %></span>
+          <span class="font-medium"><%= b.authorId !== null ? b.author.name : 'Anonymous' %></span>
         </div>
 
         <div class="flex justify-between text-sm border-b pb-1">
@@ -114,7 +114,7 @@
 						</svg> Edit
           </a>
           <button
-            onclick="openDeleteModal('<%= b.id %>', '<%= b.title %>')"
+            onclick="openDeleteModal('<%= b.id %>','books', '<%= b.title %>')"
             class="text-red-600 text-sm flex items-center gap-1"
           >
             <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24"

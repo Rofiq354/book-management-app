@@ -3,29 +3,41 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="App System">
     <title><%= title %></title>
 
     <link rel="stylesheet" href="/css/modal.css" />
     <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body class="bg-gray-50 min-h-screen flex flex-col">
-    <%- include('./partials/navbar') %>
+    <%- include('./navbar') %>
 
     <main class="flex-1 container mx-auto px-4 py-8 grid gap-10">
       <%- body %>
     </main>
 
     <!-- Footer -->
-    <footer class="bg-gray-100 text-center py-4 text-sm text-gray-500">
-      &copy; 2025 Book Management App
+    <footer class="bg-gray-200 text-center py-4 text-sm text-gray-900">
+      &copy; 2025 Created : Ainur Rofiq
     </footer>
 
-    <% if (typeof page !== 'undifined' && page === 'books') { %> <%-
-      include('../books/deleteModal') %>
-      <script src="/js/formBooksValidate.js"></script>
-      <script src="/js/queryFilterDom.js"></script>
-      <script src="/js/openDeleteModal.js"></script>
-      <script src="/js/booksTable.js"></script>
+    <!-- delete Modal -->
+    <%- include('./partials/deleteModal') %>
+
+    <% if (typeof page !== 'undifined' && page === 'Books') { %>
+      <script src="/js/books/formBooksValidate.js"></script>
+      <script src="/js/books/queryFilterDom.js"></script>
     <% } %>
+
+    <% if (typeof page !== 'undifined' && page === 'Authors') { %>
+      <script src="/js/authors/formValidate.js"></script>
+      <script src="/js/authors/queryFilterDom.js"></script>
+    <% } %>
+      
+    <script src="/js/updateTable.js"></script>
+    <script src="/js/openDeleteModal.js"></script>
+
+    <!-- Main Script -->
+    <%- include('./mainScript') %>
   </body>
 </html>

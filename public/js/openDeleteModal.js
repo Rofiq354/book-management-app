@@ -1,12 +1,14 @@
 const modal = document.getElementById("openDeleteModal");
 
-const openDeleteModal = (id, title) => {
+const openDeleteModal = (id, form, title) => {
   modal.classList.remove("hidden");
-  const bookTitleName = document.getElementById("bookTitle");
-  bookTitleName.textContent = title;
+  const textTitleName = document.getElementById("textTitle");
+  textTitleName.textContent = title;
 
   const formEl = document.querySelector("#openDeleteModal form");
-  formEl.action = `/books/delete-${id}`;
+
+  if (form === "books") formEl.action = `/books/delete-${id}`;
+  if (form === "authors") formEl.action = `/authors/delete-${id}`;
 };
 
 const closeDeleteModal = () => {

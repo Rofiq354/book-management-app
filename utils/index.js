@@ -4,6 +4,7 @@ const path = require("path");
 const folderPath = path.join(__dirname, "../data");
 const booksPath = path.join(folderPath, "books.json");
 const authorPath = path.join(folderPath, "authors.json");
+const bookDescriptions = path.join(folderPath, "bookDescription.json");
 
 if (!fs.existsSync(folderPath)) {
   fs.mkdir(folderPath);
@@ -15,6 +16,9 @@ if (!fs.existsSync(booksPath)) {
 if (!fs.existsSync(authorPath)) {
   fs.writeFileSync(authorPath, "[]");
 }
+if (!fs.existsSync(bookDescriptions)) {
+  fs.writeFileSync(bookDescriptions, "[]");
+}
 
 const loadBooks = () => {
   const file = fs.readFileSync(booksPath, "utf8");
@@ -24,6 +28,12 @@ const loadAuthors = () => {
   const file = fs.readFileSync(authorPath, "utf8");
   return JSON.parse(file);
 };
+const loadBookDescription = () => {
+  const file = fs.readFileSync(bookDescriptions, "utf8");
+  return JSON.parse(file);
+};
+
+// loadBookDescription();
 
 const objBooks = ({ title, stock, authorId }) => {
   return {
@@ -31,6 +41,14 @@ const objBooks = ({ title, stock, authorId }) => {
     title,
     authorId: Number(authorId),
     stock: Number(stock),
+    createdAt: new Date(),
+  };
+};
+
+const objAuthors = ({ name }) => {
+  return {
+    id: Date.now(),
+    name,
     createdAt: new Date(),
   };
 };
@@ -44,7 +62,7 @@ const loadData = () => {
     // console.log(b);
     return {
       ...b,
-      authorName: author.name,
+      author: author,
     };
   });
 
@@ -71,8 +89,23 @@ const updateBookData = (oldBook, newData) => {
   return merge;
 };
 
+const updateAuthorData = (oldData, newData) => {
+  const merge = {
+    ...oldData,
+    ...newData,
+    createdAt: oldData.createdAt || new Date(),
+    updatedAt: new Date(),
+  };
+
+  return merge;
+};
+
 const saveBooks = (books) => {
   fs.writeFileSync(booksPath, JSON.stringify(books));
+};
+
+const saveAuthors = (authors) => {
+  fs.writeFileSync(authorPath, JSON.stringify(authors));
 };
 
 module.exports = {
@@ -83,4 +116,7 @@ module.exports = {
   saveBooks,
   findBook,
   updateBookData,
+  objAuthors,
+  saveAuthors,
+  updateAuthorData,
 };
