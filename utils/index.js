@@ -35,11 +35,11 @@ const loadBookDescription = () => {
 
 // loadBookDescription();
 
-const objBooks = ({ title, stock, authorId }) => {
+const objBooks = ({ title, stock, authors }) => {
   return {
     id: Date.now(),
     title,
-    authorId: Number(authorId),
+    authors,
     stock: Number(stock),
     createdAt: new Date(),
   };
@@ -47,9 +47,9 @@ const objBooks = ({ title, stock, authorId }) => {
 
 const objAuthors = ({ name }) => {
   return {
-    id: Date.now(),
     name,
     createdAt: new Date(),
+    updatedAt: new Date(),
   };
 };
 

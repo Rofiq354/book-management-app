@@ -21,7 +21,7 @@ function toggleDetail(id) {
   }
 }
 
-const dblClicked = (tdElement, tdElementName, urlPath) => {
+const dblClicked = (tdElement, tdElementName, type, urlPath) => {
   tdElement.forEach((td) => {
     td.addEventListener("dblclick", function (e) {
       e.preventDefault();
@@ -95,37 +95,21 @@ const dblClicked = (tdElement, tdElementName, urlPath) => {
           data = { id, name: newValue };
         }
 
-        fetch(`/books/${urlPath}-${id}`, {
+        fetch(`/${type}/${urlPath}-${id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(data),
-        })
-          .then((res) => {
-            if (!res.ok) {
-              // Check if the response status is 2xx
-              // If not OK, handle it as an error or read as text
-              return res.text().then((text) => {
-                throw new Error(text);
-              });
-            }
-            return res.json();
-          })
-          .then((data) => {
-            console.log(data.message);
-          })
-          .catch((err) => {
-            console.error("Error submitting value:", err); // Added context to the error message
-            td.textContent = originalValue;
-          });
+        });
       }
     });
   });
 };
 
-if (tdBookTitle) dblClicked(tdBookTitle, "title", "updateTitleBook");
-if (tdBookStock) dblClicked(tdBookStock, "stock", "updateStockBook");
+if (tdBookTitle) dblClicked(tdBookTitle, "title", "books", "updateTitleBook");
+if (tdBookStock) dblClicked(tdBookStock, "stock", "books", "updateStockBook");
 // if (tdAuthorName) dblClicked(tdAuthorName, "updateAuthorBook");
 
-if (tdAuthorName) dblClicked(tdAuthorName, "name", "updateNameAuthor");
+if (tdAuthorName)
+  dblClicked(tdAuthorName, "authorName", "authors", "updateNameAuthor");

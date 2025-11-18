@@ -1,21 +1,15 @@
-const {
-  loadBooks,
-  loadAuthors,
-  loadData,
-  objBooks,
-  saveBooks,
-  findBook,
-  updateBookData,
-} = require("../utils");
+const Author = require("../models/authors");
+const Book = require("../models/books");
+const { objBooks } = require("../utils");
 const { Seo } = require("../utils/dataSeo");
 
-exports.index = (req, res) => {
+exports.index = async (req, res) => {
   try {
     const page = "Books";
     const seo = Seo(req, `| ${page}`);
-    // const books = loadBooks();
-    const authors = loadAuthors();
-    const datas = loadData();
+
+    const authors = await Author.find();
+    const datas = await Book.find().populate("authors");
 
     const qAuthor = req.query.author;
     const qStock = req.query.stock;
@@ -25,7 +19,7 @@ exports.index = (req, res) => {
     if (!qAuthor) {
       result;
     } else {
-      result = datas.filter((b) => b.author.name === qAuthor);
+      result = datas.filter((b) => b.authors.name === qAuthor);
     }
 
     if (qStock === "up") {
@@ -47,12 +41,9 @@ exports.index = (req, res) => {
   }
 };
 
-exports.addBook = (req, res) => {
+exports.addBook = async (req, res) => {
   try {
-    const books = loadBooks();
-    books.push(objBooks(req.body));
-
-    saveBooks(books);
+    await Book.create(objBooks(req.body));
 
     res.redirect("/books");
   } catch (error) {
@@ -60,12 +51,13 @@ exports.addBook = (req, res) => {
   }
 };
 
-exports.editBook = (req, res) => {
+exports.editBook = async (req, res) => {
   try {
     const seo = Seo(req, "| Edit Book");
-    const books = loadBooks();
-    const authors = loadAuthors();
-    const datas = loadData();
+    const book = await Book.findOne({ _id: req.params.id });
+
+    const authors = await Author.find();
+    const datas = await Book.find().populate("authors");
 
     const qAuthor = req.query.author;
     const qStock = req.query.stock;
@@ -75,7 +67,7 @@ exports.editBook = (req, res) => {
     if (!qAuthor) {
       result;
     } else {
-      result = datas.filter((b) => b.authorName === qAuthor);
+      result = datas.filter((b) => b.authors.name === qAuthor);
     }
 
     if (qStock === "up") {
@@ -83,8 +75,6 @@ exports.editBook = (req, res) => {
     } else if (qStock === "down") {
       result = result.sort((a, b) => a.stock - b.stock);
     }
-
-    const book = books.find((b) => b.id == req.params.id);
 
     res.render("books/index", {
       title: seo.documentTitle,
@@ -99,21 +89,20 @@ exports.editBook = (req, res) => {
   }
 };
 
-exports.updatedBook = (req, res) => {
+exports.updatedBook = async (req, res) => {
   try {
-    const { books, book, bookIndex } = findBook(req.params.id);
-
-    if (bookIndex === -1) throw new Error("Buku tidak ditemukan");
-
-    const newBook = updateBookData(book, {
-      title: req.body.title,
-      stock: Number(req.body.stock),
-      authorId: Number(req.body.authorId),
-    });
-
-    books[bookIndex] = newBook;
-
-    saveBooks(books);
+    await Book.findByIdAndUpdate(
+      req.body.id,
+      {
+        title: req.body.title,
+        stock: Number(req.body.stock),
+        authors: req.body.authors,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
     res.redirect("/books");
   } catch (error) {
@@ -121,33 +110,24 @@ exports.updatedBook = (req, res) => {
   }
 };
 
-exports.updateTitleBook = (req, res) => {
+exports.updateTitleBook = async (req, res) => {
   try {
-    const { books, book } = findBook(req.body.id);
-    const { title } = req.body;
+    await Book.findByIdAndUpdate(req.body.id, {
+      title: req.body.title,
+    });
 
-    const newBook = updateBookData(book, { title });
-
-    books[bookIndex] = newBook;
-
-    saveBooks(books);
-    res.json({ message: "Book title updated!" });
     res.redirect("/books");
   } catch (error) {
     console.error(error.message);
   }
 };
 
-exports.updateStockBook = (req, res) => {
+exports.updateStockBook = async (req, res) => {
   try {
-    const { books, book } = findBook(req.body.id);
-    const { stock } = req.body;
+    await Book.findByIdAndUpdate(req.body.id, {
+      stock: req.body.stock,
+    });
 
-    const newBook = updateBookData(book, { stock });
-
-    books[bookIndex] = newBook;
-
-    saveBooks(books);
     res.json({ message: "Book Stock updated!" });
     res.redirect("/books");
   } catch (error) {
@@ -155,14 +135,9 @@ exports.updateStockBook = (req, res) => {
   }
 };
 
-exports.deleteBook = (req, res) => {
+exports.deleteBook = async (req, res) => {
   try {
-    const { books, bookIndex } = findBook(req.params.id);
-    if (bookIndex === -1) throw new Error("Buku tidak ditemukan");
-
-    books.splice(bookIndex, 1);
-
-    saveBooks(books);
+    await Book.findByIdAndDelete(req.params.id);
 
     res.redirect("/books");
   } catch (error) {

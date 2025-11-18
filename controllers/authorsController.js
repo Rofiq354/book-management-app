@@ -1,36 +1,42 @@
-const {
-  loadAuthors,
-  loadBooks,
-  objAuthors,
-  saveAuthors,
-  updateAuthorData,
-  updateBookData,
-  saveBooks,
-} = require("../utils");
+const Author = require("../models/authors");
+const Book = require("../models/books");
+const { objAuthors } = require("../utils");
 const { Seo } = require("../utils/dataSeo");
 
-exports.index = (req, res) => {
+exports.index = async (req, res) => {
   try {
     const page = "Authors";
     const seo = Seo(req, `| ${page}`);
+
+    const authors = await Author.aggregate([
+      {
+        $lookup: {
+          from: "books",
+          localField: "_id",
+          foreignField: "authors",
+          as: "books",
+        },
+      },
+      {
+        $addFields: {
+          totalBooks: { $size: "$books" },
+        },
+      },
+      {
+        $project: {
+          books: 0, // hapus array buku agar tidak berat
+        },
+      },
+    ]);
+
     let qBookTotal = req.query.bookTotal;
     let qDate = req.query.date;
-
-    const datas = loadAuthors();
-    const books = loadBooks();
-
-    let result = datas.map((author) => {
-      const data = books.filter((book) => author.id === book.authorId);
-      return {
-        ...author,
-        books: data,
-      };
-    });
+    let result = authors;
 
     if (qBookTotal === "down") {
-      result = result.sort((a, b) => a.books.length - b.books.length);
+      result = result.sort((a, b) => a.totalBooks - b.totalBooks);
     } else if (qBookTotal === "up") {
-      result = result.sort((a, b) => b.books.length - a.books.length);
+      result = result.sort((a, b) => b.totalBooks - a.totalBooks);
     }
 
     if (qDate === "newest") {
@@ -59,14 +65,9 @@ exports.index = (req, res) => {
   }
 };
 
-exports.addData = (req, res) => {
+exports.addData = async (req, res) => {
   try {
-    const authors = loadAuthors();
-    const author = objAuthors(req.body);
-
-    authors.push(author);
-
-    saveAuthors(authors);
+    await Author.create(objAuthors(req.body));
 
     res.redirect("/authors");
   } catch (error) {
@@ -74,29 +75,42 @@ exports.addData = (req, res) => {
   }
 };
 
-exports.editData = (req, res) => {
+exports.editData = async (req, res) => {
   try {
     const page = "Authors";
     const seo = Seo(req, `| Edit ${page}`);
-    const authorId = Number(req.params.id);
+    const authorId = req.params.id;
     let qBookTotal = req.query.bookTotal;
     let qDate = req.query.date;
 
-    let authors = loadAuthors();
-    const books = loadBooks();
+    const authors = await Author.aggregate([
+      {
+        $lookup: {
+          from: "books",
+          localField: "_id",
+          foreignField: "authors",
+          as: "books",
+        },
+      },
+      {
+        $addFields: {
+          totalBooks: { $size: "$books" },
+        },
+      },
+      {
+        $project: {
+          books: 0, // hapus array buku agar tidak berat
+        },
+      },
+    ]);
+    const author = await Author.findOne({ _id: authorId });
 
-    let result = authors.map((author) => {
-      const data = books.filter((book) => author.id === book.authorId);
-      return {
-        ...author,
-        books: data,
-      };
-    });
+    let result = authors;
 
     if (qBookTotal === "down") {
-      result = result.sort((a, b) => a.books.length - b.books.length);
+      result = result.sort((a, b) => a.totalBooks - b.totalBooks);
     } else if (qBookTotal === "up") {
-      result = result.sort((a, b) => b.books.length - a.books.length);
+      result = result.sort((a, b) => b.totalBooks - a.totalBooks);
     }
 
     if (qDate === "newest") {
@@ -113,8 +127,6 @@ exports.editData = (req, res) => {
       });
     }
 
-    const author = result.find((a) => a.id === authorId);
-
     res.render("authors/index", {
       data: "hello world!",
       title: seo.documentTitle,
@@ -127,76 +139,42 @@ exports.editData = (req, res) => {
   }
 };
 
-exports.updatedData = (req, res) => {
+exports.updatedData = async (req, res) => {
   try {
-    const authors = loadAuthors();
-    const authorId = Number(req.params.id);
-    const authorIndex = authors.findIndex((a) => a.id === authorId);
-
-    if (authorIndex < 0) "Data tidak ditemukan";
-
-    const author = authors[authorIndex];
-
-    const newData = updateAuthorData(author, {
-      name: req.body.name,
+    await Author.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+      runValidators: true,
     });
 
-    authors[authorIndex] = newData;
-
-    saveAuthors(authors);
     res.redirect("/authors");
   } catch (err) {
     console.error(err.message);
   }
 };
 
-exports.updateNameAuthor = (req, res) => {
+exports.updateNameAuthor = async (req, res) => {
   try {
-    const authors = loadAuthors();
-    const authorId = Number(req.params.id);
-    const authorIndex = authors.findIndex((a) => a.id === authorId);
-
-    if (authorIndex < 0) "Data tidak ditemukan";
-
-    const author = authors[authorIndex];
-
-    const newData = updateAuthorData(author, {
-      name: req.body.name,
-    });
-
-    authors[authorIndex] = newData;
-
-    saveAuthors(authors);
-    res.json({ message: "Book Stock updated!" });
+    await Author.findByIdAndUpdate(
+      req.body.id,
+      {
+        name: req.body.authorName,
+      },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
     res.redirect("/authors");
   } catch (error) {
     console.error(error.message);
   }
 };
 
-exports.deleteData = (req, res) => {
+exports.deleteData = async (req, res) => {
   try {
-    const authors = loadAuthors();
-    const authorId = Number(req.params.id);
-    const authorIndex = authors.findIndex((a) => a.id === authorId);
-    if (authorIndex < 0) "Data tidak ditemukan";
-
-    // saveAuthors(authors);
-
-    const books = loadBooks();
-    const bookIndex = books.findIndex((b) => b.authorId === authorId);
-    if (bookIndex < 0) "Data tidak ditemukan";
-
-    const newDataBook = updateBookData(books[bookIndex], {
-      authorId: null,
-    });
-
-    books[bookIndex] = newDataBook;
-
-    authors.splice(authorIndex, 1);
-
-    saveAuthors(authors);
-    saveBooks(books)
+    const author = await Author.findById(req.params.id);
+    await Book.findOneAndDelete({ authors: author });
+    await Author.findByIdAndDelete(author);
 
     res.redirect("/authors");
   } catch (error) {

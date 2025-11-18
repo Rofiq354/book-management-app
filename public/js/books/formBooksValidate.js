@@ -1,7 +1,7 @@
 function validateForm() {
   let titleInput = document.getElementById("title");
   let stockInput = document.getElementById("stock");
-  let authorIdSelect = document.getElementById("authorId");
+  let authorIdSelect = document.getElementById("authors");
 
   let titleValue = titleInput.value.trim();
   let stockValue = stockInput.value;

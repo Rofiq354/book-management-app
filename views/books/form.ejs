@@ -3,67 +3,35 @@
     <%= book == '' ? 'Add New' : 'Edit Data' %> Book
   </h2>
 
-  <form
-    action="/books/<%= book == '' ? 'add' : `updated-${book.id}` %>"
-    method="post"
-    onsubmit="return validateForm()"
-    id="book-form"
-    class="grid gap-4 md:grid-cols-3"
-  >
+  <form action="/books/<%= book == '' ? 'add' : `updated-${book.id}` %>" method="post" onsubmit="return validateForm()" id="book-form" class="grid gap-4 md:grid-cols-3">
     <div class="flex flex-col">
-      <label for="title" class="text-sm font-medium text-gray-600 mb-1"
-        >Title</label
-      >
-      <input
-        type="text"
-        id="title"
-        name="title"
-        value="<%= book.title %>"
-        placeholder="Book title"
-        class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400"
-      />
-			<span id="titleError" class="text-sm text-red-500 mt-1"></span>
+      <input type="hidden" name="id" value="<%= book.id %>">
+      <label for="title" class="text-sm font-medium text-gray-600 mb-1">Title</label>
+      <input type="text" id="title" name="title" value="<%= book.title %>" placeholder="Book title" class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400" />
+      <span id="titleError" class="text-sm text-red-500 mt-1"></span>
     </div>
 
     <div class="flex flex-col">
-      <label for="stock" class="text-sm font-medium text-gray-600 mb-1"
-        >Stock</label
-      >
-      <input
-        type="number"
-        id="stock"
-        name="stock"
-        value="<%= book.stock %>"
-        placeholder="Stock amount"
-        class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400"
-      />
-			<span id="stockError" class="text-sm text-red-500 mt-1"></span>
+      <label for="stock" class="text-sm font-medium text-gray-600 mb-1">Stock</label>
+      <input type="number" id="stock" name="stock" value="<%= book.stock %>" placeholder="Stock amount" class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400" />
+      <span id="stockError" class="text-sm text-red-500 mt-1"></span>
     </div>
 
     <div class="flex flex-col">
-      <label for="authorId" class="text-sm font-medium text-gray-600 mb-1"
-        >Author</label
-      >
-      <select
-        id="authorId"
-        name="authorId"
-        class="border cursor-pointer rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400"
-      >
+      <label for="authors" class="text-sm font-medium text-gray-600 mb-1">Author</label>
+      <select id="authors" name="authors" class="border cursor-pointer rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400">
         <option value="" disabled selected>Select author</option>
         <% authors.forEach(a => { %>
-            <option value="<%= a.id %>" <%= book.authorId == a.id ? 'selected' : '' %> >
-            <%= a.name %>
-            </option>
+        <option value="<%= a.id %>" <%= book.authors == a.id ? 'selected' : '' %>>
+          <%= a.name %>
+        </option>
         <% }) %>
       </select>
-			<span id="authorIdError" class="text-sm text-red-500 mt-1"></span>
+      <span id="authorIdError" class="text-sm text-red-500 mt-1"></span>
     </div>
 
     <div class="md:col-span-3 flex justify-end">
-      <button
-        type="submit"
-        class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition"
-      >
+      <button type="submit" class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition">
         Save Book
       </button>
     </div>

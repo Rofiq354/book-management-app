@@ -22,7 +22,7 @@ router.get("/authors", authorController.index);
 router.post("/authors/add", authorController.addData);
 router.get("/authors/edit-:id", authorController.editData);
 router.post("/authors/updated-:id", authorController.updatedData);
-router.post("/books/updateNameAuthor-:id", authorController.updateNameAuthor);
+router.post("/authors/updateNameAuthor-:id", authorController.updateNameAuthor);
 router.post("/authors/delete-:id", authorController.deleteData);
 
 module.exports = router;

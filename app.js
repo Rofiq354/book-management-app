@@ -1,6 +1,7 @@
 const e = require("express");
 const app = e();
 const port = 3001;
+require("./utils/db");
 
 app.use(e.json());
 
