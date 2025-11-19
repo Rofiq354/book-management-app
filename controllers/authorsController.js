@@ -7,8 +7,36 @@ exports.index = async (req, res) => {
   try {
     const page = "Authors";
     const seo = Seo(req, `| ${page}`);
+    let qBookTotal = req.query.bookTotal;
+    let qDate = req.query.date;
 
-    const authors = await Author.aggregate([
+    let bookTotalQuery = null;
+    let dateQuery = null;
+
+    if (qBookTotal === "down") bookTotalQuery = { totalBooks: 1 };
+    if (qBookTotal === "up") bookTotalQuery = { totalBooks: -1 };
+
+    if (qDate === "oldest") dateQuery = { createdAt: 1 };
+    if (qDate === "newest") dateQuery = { createdAt: -1 };
+
+    // FILTERING BY DATE RANGE
+    // if (req.query.start && req.query.end) {
+    //   dateQuery.createdAt = {
+    //     $gte: new Date(req.query.start),
+    //     $lte: new Date(req.query.end),
+    //   };
+    // } else if (req.query.start) {
+    //   dateQuery.createdAt = { $gte: new Date(req.query.start) };
+    // } else if (req.query.end) {
+    //   dateQuery.createdAt = { $lte: new Date(req.query.end) };
+    // }
+
+    // FILTER DATE RANGE (opsional)
+    // if (Object.keys(dateQuery).length > 0) {
+    //   pipeline.push({ $match: dateQuery });
+    // }
+
+    const pipeline = [
       {
         $lookup: {
           from: "books",
@@ -27,31 +55,15 @@ exports.index = async (req, res) => {
           books: 0, // hapus array buku agar tidak berat
         },
       },
-    ]);
+    ];
 
-    let qBookTotal = req.query.bookTotal;
-    let qDate = req.query.date;
-    let result = authors;
+    if (bookTotalQuery) pipeline.push({ $sort: bookTotalQuery });
 
-    if (qBookTotal === "down") {
-      result = result.sort((a, b) => a.totalBooks - b.totalBooks);
-    } else if (qBookTotal === "up") {
-      result = result.sort((a, b) => b.totalBooks - a.totalBooks);
-    }
+    if (dateQuery) pipeline.push({ $sort: dateQuery });
 
-    if (qDate === "newest") {
-      result = result.sort((a, b) => {
-        if (!a.createdAt) return 1;
-        if (!b.createdAt) return -1;
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
-    } else if (qDate === "oldest") {
-      result = result.sort((a, b) => {
-        if (!a.createdAt) return 1;
-        if (!b.createdAt) return -1;
-        return new Date(a.createdAt) - new Date(b.createdAt);
-      });
-    }
+    const authors = await Author.aggregate(pipeline);
+
+    const result = authors;
 
     res.render("authors/index", {
       data: "hello world!",
@@ -83,7 +95,33 @@ exports.editData = async (req, res) => {
     let qBookTotal = req.query.bookTotal;
     let qDate = req.query.date;
 
-    const authors = await Author.aggregate([
+    let bookTotalQuery = null;
+    let dateQuery = null;
+
+    if (qBookTotal === "down") bookTotalQuery = { totalBooks: 1 };
+    if (qBookTotal === "up") bookTotalQuery = { totalBooks: -1 };
+
+    if (qDate === "oldest") dateQuery = { createdAt: 1 };
+    if (qDate === "newest") dateQuery = { createdAt: -1 };
+
+    // FILTERING BY DATE RANGE
+    // if (req.query.start && req.query.end) {
+    //   dateQuery.createdAt = {
+    //     $gte: new Date(req.query.start),
+    //     $lte: new Date(req.query.end),
+    //   };
+    // } else if (req.query.start) {
+    //   dateQuery.createdAt = { $gte: new Date(req.query.start) };
+    // } else if (req.query.end) {
+    //   dateQuery.createdAt = { $lte: new Date(req.query.end) };
+    // }
+
+    // FILTER DATE RANGE (opsional)
+    // if (Object.keys(dateQuery).length > 0) {
+    //   pipeline.push({ $match: dateQuery });
+    // }
+
+    const pipeline = [
       {
         $lookup: {
           from: "books",
@@ -102,30 +140,17 @@ exports.editData = async (req, res) => {
           books: 0, // hapus array buku agar tidak berat
         },
       },
-    ]);
+    ];
+
+    if (bookTotalQuery) pipeline.push({ $sort: bookTotalQuery });
+
+    if (dateQuery) pipeline.push({ $sort: dateQuery });
+
+    const authors = await Author.aggregate(pipeline);
+
+    const result = authors;
+
     const author = await Author.findOne({ _id: authorId });
-
-    let result = authors;
-
-    if (qBookTotal === "down") {
-      result = result.sort((a, b) => a.totalBooks - b.totalBooks);
-    } else if (qBookTotal === "up") {
-      result = result.sort((a, b) => b.totalBooks - a.totalBooks);
-    }
-
-    if (qDate === "newest") {
-      result = result.sort((a, b) => {
-        if (!a.createdAt) return 1;
-        if (!b.createdAt) return -1;
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      });
-    } else if (qDate === "oldest") {
-      result = result.sort((a, b) => {
-        if (!a.createdAt) return 1;
-        if (!b.createdAt) return -1;
-        return new Date(a.createdAt) - new Date(b.createdAt);
-      });
-    }
 
     res.render("authors/index", {
       data: "hello world!",

@@ -30,7 +30,7 @@ document.getElementById("stockDown").addEventListener("click", function (e) {
 document.getElementById("reloadFilter").addEventListener("click", function () {
   window.location = "/books";
 });
- 
+
 const filterStock = document.getElementById("filterStock");
 if (filterStock) {
   filterStock.addEventListener("change", function (e) {

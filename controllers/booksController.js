@@ -9,24 +9,26 @@ exports.index = async (req, res) => {
     const seo = Seo(req, `| ${page}`);
 
     const authors = await Author.find();
-    const datas = await Book.find().populate("authors");
+    let result = await Book.find().populate("authors");
 
     const qAuthor = req.query.author;
     const qStock = req.query.stock;
 
-    let result = datas;
+    let authorQuery = {};
+    let sortQuery = {};
 
-    if (!qAuthor) {
-      result;
-    } else {
-      result = datas.filter((b) => b.authors.name === qAuthor);
+    if (qAuthor) {
+      const author = await Author.findOne({ name: qAuthor });
+
+      if (author) {
+        authorQuery.authors = author._id;
+      }
     }
 
-    if (qStock === "up") {
-      result = result.sort((a, b) => b.stock - a.stock);
-    } else if (qStock === "down") {
-      result = result.sort((a, b) => a.stock - b.stock);
-    }
+    if (qStock === "up") sortQuery.stock = -1;
+    if (qStock === "down") sortQuery.stock = 1;
+
+    result = await Book.find(authorQuery).sort(sortQuery).populate("authors");
 
     res.render("books/index", {
       title: seo.documentTitle,
@@ -57,24 +59,26 @@ exports.editBook = async (req, res) => {
     const book = await Book.findOne({ _id: req.params.id });
 
     const authors = await Author.find();
-    const datas = await Book.find().populate("authors");
+    let result = await Book.find().populate("authors");
 
     const qAuthor = req.query.author;
     const qStock = req.query.stock;
 
-    let result = datas;
+    let authorQuery = {};
+    let sortQuery = {};
 
-    if (!qAuthor) {
-      result;
-    } else {
-      result = datas.filter((b) => b.authors.name === qAuthor);
+    if (qAuthor) {
+      const author = await Author.findOne({ name: qAuthor });
+
+      if (author) {
+        authorQuery.authors = author._id;
+      }
     }
 
-    if (qStock === "up") {
-      result = result.sort((a, b) => b.stock - a.stock);
-    } else if (qStock === "down") {
-      result = result.sort((a, b) => a.stock - b.stock);
-    }
+    if (qStock === "up") sortQuery.stock = -1;
+    if (qStock === "down") sortQuery.stock = 1;
+
+    result = await Book.find(authorQuery).sort(sortQuery).populate("authors");
 
     res.render("books/index", {
       title: seo.documentTitle,
