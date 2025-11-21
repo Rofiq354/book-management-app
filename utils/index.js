@@ -109,14 +109,6 @@ const saveAuthors = (authors) => {
 };
 
 module.exports = {
-  loadBooks,
-  loadAuthors,
-  loadData,
   objBooks,
-  saveBooks,
-  findBook,
-  updateBookData,
   objAuthors,
-  saveAuthors,
-  updateAuthorData,
 };
