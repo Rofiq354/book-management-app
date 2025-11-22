@@ -1,6 +1,6 @@
 const Author = require("../models/Author");
 const Book = require("../models/Book");
-const { objAuthors } = require("../utils");
+const { objAuthors } = require("../utils/objData");
 
 exports.getAllAuthors = async () => {
   const authors = await Author.find();

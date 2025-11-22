@@ -1,24 +1,43 @@
-const { loadBooks, loadAuthors } = require("../utils");
+const Author = require("../models/Author");
+const Book = require("../models/Book");
 const { Seo } = require("../utils/dataSeo");
 
-exports.index = (req, res) => {
+exports.index = async (req, res, next) => {
   try {
     const page = "";
     const seo = Seo(req, page);
-    const books = loadBooks();
-    let authors = loadAuthors();
+    const books = await Book.find();
 
-    const topBook = books.length
-      ? books.reduce((a, b) => (a.stock > b.stock ? a : b))
-      : null;
+    const topBook = await Book.findOne().sort({ stock: -1 });
 
-    authors = authors.map((a) => {
-      return { ...a, bookCount: books.filter((b) => b.authorId === a.id) };
+    const authors = await Author.aggregate([
+      {
+        $lookup: {
+          from: "books",
+          localField: "_id",
+          foreignField: "authors",
+          as: "books",
+        },
+      },
+      {
+        $addFields: {
+          totalBooks: { $size: "$books" },
+        },
+      },
+      {
+        $project: {
+          books: 0,
+        },
+      },
+      {
+        $sort: { totalBooks: -1 }, // 🔥 sort by most books
+      },
+    ]);
+
+    const authorMap = {};
+    authors.forEach((a) => {
+      authorMap[a._id] = a.name;
     });
-
-    authors.sort((a, b) => b.id - a.id);
-
-    console.log(authors);
 
     res.render("index", {
       data: "Halo",
@@ -26,9 +45,10 @@ exports.index = (req, res) => {
       page,
       books,
       authors,
+      authorMap,
       topBook,
     });
   } catch (error) {
-    console.error(error.message);
+    next(error);
   }
 };

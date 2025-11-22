@@ -1,6 +1,6 @@
 const Author = require("../models/Author");
 const Book = require("../models/Book");
-const { objBooks } = require("../utils");
+const { objBooks } = require("../utils/objData");
 
 exports.getDataBooks = async (query) => {
   let result = await Book.find().populate("authors");
