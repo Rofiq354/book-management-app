@@ -17,7 +17,7 @@
     "dev": "nodemon server.js",
     "start": "node server.js",
     "route:list": "node ./scripts/route-list.js",
-    "build:css": "npx @tailwindcss/cli -i ./public/css/tailwind.css -o ./public/css/style.css --minify",
+    "build:css": "npx @tailwindcss/cli -i public/css/tailwind.css -o public/css/style.css --minify",
     "watch": "npx @tailwindcss/cli -i ./public/css/tailwind.css -o ./public/css/style.css --watch"
   },
   "dependencies": {
