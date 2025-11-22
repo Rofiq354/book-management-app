@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Error <%= status %></title>
+
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body class="min-h-screen bg-gray-50 flex flex-col justify-center px-10">
+
+  <div class="max-w-3xl">
+    <!-- Status Code -->
+    <h1 class="text-7xl font-bold text-indigo-600 mb-4 leading-none">
+      <%= status %>
+    </h1>
+
+    <!-- Message -->
+    <p class="text-2xl text-gray-800 font-light mb-10 max-w-2xl">
+      <%= message %>
+    </p>
+
+    <!-- Optional subtext -->
+    <p class="text-gray-500 text-sm mb-16">
+      The page you are looking for might have been removed, changed, or is temporarily unavailable.
+    </p>
+
+    <!-- Back Button (Left Positioned) -->
+    <a href="/" class="inline-block text-indigo-600 text-sm font-medium hover:underline">
+      ← Kembali ke Beranda
+    </a>
+  </div>
+
+</body>
+
+</html>
