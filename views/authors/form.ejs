@@ -1,0 +1,41 @@
+<section
+  aria-labelledby="form-author-title"
+  class="bg-white p-6 rounded-2xl shadow"
+>
+  <h2 id="form-author-title" class="text-lg font-semibold mb-4 text-gray-700">
+    <%= author == '' ? 'Add New' : 'Edit Data' %> Author
+  </h2>
+
+  <form
+    action="/authors/<%= author == '' ? 'add' : `updated-${author.id}` %>"
+    method="post"
+    onsubmit="return validateForm()"
+    id="author-form"
+    class="grid gap-4 md:grid-cols-3"
+  >
+    <div class="md:col-span-3 flex flex-col">
+      <label for="name" class="text-sm font-medium text-gray-600 mb-1"
+        >Name</label
+      >
+      <input
+        type="text"
+        id="name"
+        name="name"
+        value="<%= author.name %>"
+        placeholder="author name"
+        autocomplete="additional-name"
+        class="border rounded-lg px-3 py-2 focus:ring-2 focus:ring-indigo-400"
+      />
+      <span id="nameError" class="text-sm text-red-500 mt-1"></span>
+    </div>
+
+    <div class="md:col-span-3 flex justify-end">
+      <button
+        type="submit"
+        class="bg-indigo-600 text-white px-5 py-2 rounded-lg hover:bg-indigo-700 transition"
+      >
+        Save Author
+      </button>
+    </div>
+  </form>
+</section>

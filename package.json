@@ -1,0 +1,38 @@
+{
+  "name": "book-management-app",
+  "version": "1.0.0",
+  "description": "book management app practice backend",
+  "keywords": [
+    "Book",
+    "Management",
+    "App",
+    "Back-End",
+    "Web-Dev"
+  ],
+  "license": "ISC",
+  "author": "Ainur Rofiq",
+  "type": "commonjs",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js",
+    "start": "node server.js",
+    "route:list": "node ./scripts/route-list.js",
+    "build:css": "tailwindcss -i ./public/css/tailwind.css -o ./public/css/style.css",
+    "watch": "tailwindcss -i ./public/css/tailwind.css -o ./public/css/style.css --watch"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.17",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "express-ejs-layouts": "^2.5.1",
+    "mongoose": "^8.20.0",
+    "tailwindcss": "^4.1.17"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.22",
+    "nodemon": "^3.1.10",
+    "postcss": "^8.5.6"
+  }
+}
